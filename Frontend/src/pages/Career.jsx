@@ -166,7 +166,7 @@ const Career = () => {
 								<div>
 									<p className="eyebrow">{selectedRoleData.recommended ? "Recommended career" : "Selected career"}</p>
 									<h2>{selectedRole}</h2>
-									<p className="career-rationale">{careerRecommendation.aiInput}</p>
+									<p className="career-rationale">{selectedRoleData.recommended && careerRecommendation.aiInput}</p>
 								</div>
 							</div>
 

@@ -6,7 +6,6 @@ import {
   ExternalLink,
   Flame,
   PlayCircle,
-  Star,
   Trophy,
 } from "lucide-react";
 
@@ -614,12 +613,6 @@ const Roadmap = () => {
 
                     <h2>Keep moving</h2>
                   </div>
-
-                  <Star
-                    size={17}
-                    className="starred-icon"
-                    fill="currentColor"
-                  />
                 </div>
 
                 <div className="roadmap-arc-wrap">
@@ -676,6 +669,17 @@ const Roadmap = () => {
                   Complete modules consistently and submit projects when you are
                   ready to verify your work.
                 </p>
+              </section>
+
+              <section className="roadmap-explore-card roadmap-card">
+                <p className="eyebrow">Find your next path</p>
+
+                <h2>Explore other roadmaps</h2>
+
+                <Link to="/roadmaps" className="verify-project-button">
+                  Explore roadmaps
+                  <ExternalLink size={14} />
+                </Link>
               </section>
             </aside>
           </div>

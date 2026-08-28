@@ -27,6 +27,8 @@ import { getSkillGap } from "../api/skillGap.api";
 
 import { getRoadmap } from "../api/roadmap.api";
 
+import { getActivityHeatmap } from "../api/activity.api";
+
 import useUserStore from "../store/useUserStore";
 
 const clampScore = (value) => {
@@ -54,6 +56,8 @@ const Dashboard = () => {
 
   const [roadmap, setRoadmap] = useState(null);
 
+  const [activity, setActivity] = useState([]);
+
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
@@ -70,6 +74,7 @@ const Dashboard = () => {
           getCareerRecommendations(),
           getSkillGap(),
           getRoadmap(),
+          getActivityHeatmap(),
         ]);
 
         if (results[0].status === "fulfilled") {
@@ -90,6 +95,10 @@ const Dashboard = () => {
 
         if (results[4].status === "fulfilled") {
           setRoadmap(results[4].value);
+        }
+
+        if (results[5].status === "fulfilled") {
+          setActivity(results[5].value?.data ?? []);
         }
 
         const coreFailed =
@@ -150,6 +159,47 @@ const Dashboard = () => {
     };
   }, [roadmapTopics]);
 
+  const streakStats = useMemo(() => {
+    const getDateKey = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+
+      return `${year}-${month}-${day}`;
+    };
+
+    const activeDates = new Set(
+      activity
+        .filter((item) => item.count > 0)
+        .map((item) => item.date),
+    );
+
+    let maximum = 0;
+    let running = 0;
+
+    activity.forEach((item) => {
+      if (item.count > 0) {
+        running += 1;
+        maximum = Math.max(maximum, running);
+      } else {
+        running = 0;
+      }
+    });
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    let current = 0;
+    const cursor = new Date(today);
+
+    while (activeDates.has(getDateKey(cursor))) {
+      current += 1;
+      cursor.setDate(cursor.getDate() - 1);
+    }
+
+    return { current, maximum };
+  }, [activity]);
+
   const githubUsername =
     profile?.github_username ?? skills?.github_username ?? "";
 
@@ -195,15 +245,15 @@ const Dashboard = () => {
               </div>
 
               <div className="profile-meta">
-                <span>Profile</span>
+                <span>Readiness Score</span>
 
-                <strong>{profile ? "Ready" : "Pending"}</strong>
+                <strong>{readinessScore == 100 ? "Ready" : readinessScore}</strong>
               </div>
 
               <div className="xp-track">
                 <span
                   style={{
-                    width: profile ? "100%" : "20%",
+                    width: readinessScore,
                   }}
                 />
               </div>
@@ -216,6 +266,44 @@ const Dashboard = () => {
                 <Pencil size={14} />
                 Edit profile
               </button>
+            </section>
+
+            {/* STREAK */}
+
+            <section className="dashboard-card sidebar-streak-card">
+              <div className="sidebar-streak-heading">
+                <div className="streak-icon">
+                  <Flame size={19} />
+                </div>
+
+                <div>
+                  <p className="eyebrow">Learning rhythm</p>
+
+                  <h3>Keep the momentum</h3>
+                </div>
+              </div>
+
+              <div className="sidebar-streak-stats">
+                <div>
+                  <span className="sidebar-streak-stat-icon current">
+                    <Flame size={14} />
+                  </span>
+
+                  <strong>{streakStats.current}</strong>
+
+                  <span>Current streak</span>
+                </div>
+
+                <div>
+                  <span className="sidebar-streak-stat-icon maximum">
+                    <Trophy size={14} />
+                  </span>
+
+                  <strong>{streakStats.maximum}</strong>
+
+                  <span>Max streak</span>
+                </div>
+              </div>
             </section>
 
             {/* PROFILE LINKS */}
@@ -450,12 +538,6 @@ const Dashboard = () => {
 
                 <Trophy size={18} />
               </div>
-
-              <p className="muted">
-                {career?.ai_input ??
-                  career?.["AI Input"] ??
-                  "Your career recommendation will appear after onboarding."}
-              </p>
 
               {gap && (
                 <div
