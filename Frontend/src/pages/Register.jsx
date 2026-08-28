@@ -727,9 +727,6 @@ const Register = () => {
 
               <span>
                 Resume{" "}
-                <small>
-                  Optional
-                </small>
               </span>
 
 

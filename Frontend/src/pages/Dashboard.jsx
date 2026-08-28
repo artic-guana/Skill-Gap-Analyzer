@@ -8,6 +8,7 @@ import {
   CodeXml,
   ExternalLink,
   Flame,
+  FileCheck2,
   Pencil,
   Trophy,
   UserRound,
@@ -210,6 +211,8 @@ const Dashboard = () => {
     profile?.full_name ?? user?.email?.split("@")[0] ?? "Student";
 
   const readinessScore = clampScore(gap?.readiness_score);
+
+  const atsScore = clampScore(skills?.ats_score);
 
   return (
     <>
@@ -493,6 +496,32 @@ const Dashboard = () => {
                     )}
                   </div>
                 </div>
+              </section>
+
+              {/* RESUME ATS SCORE */}
+
+              <section className="ats-card dashboard-card">
+                <div className="streak-icon ats-card-icon">
+                  <FileCheck2 size={20} />
+                </div>
+
+                <p className="eyebrow">Resume quality</p>
+
+                <strong className="ats-score-number">
+                  {atsScore}
+
+                  <small>%</small>
+                </strong>
+
+                <div className="ats-track" aria-label={`Resume ATS score ${atsScore} percent`}>
+                  <span style={{ width: `${atsScore}%` }} />
+                </div>
+
+                <p className="muted">
+                  {atsScore === 0
+                    ? "Upload a resume during onboarding to calculate your score."
+                    : "Estimated compatibility with applicant tracking systems."}
+                </p>
               </section>
 
               {/* ROADMAP PROGRESS */}

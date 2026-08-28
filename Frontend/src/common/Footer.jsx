@@ -6,7 +6,7 @@ const Footer = () => (
 	<footer className="site-footer">
 		<div className="site-footer-inner">
 			<div className="site-footer-brand">
-				<img src={visionLogo} alt="Team Vision" />
+				<img src={visionLogo} alt="Team Vision"/>
 
 				<div>
 					<p className="eyebrow">SkillPath</p>

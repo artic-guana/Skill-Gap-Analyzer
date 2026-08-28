@@ -24,6 +24,8 @@ class SkillProfile(Document):
         default_factory=list
     )
 
+    ats_score: int = 0
+
     competitive_programming: dict | None = None
 
     created_at: datetime = Field(

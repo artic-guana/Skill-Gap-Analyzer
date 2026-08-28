@@ -18,6 +18,7 @@ from models.skill_profile import SkillProfile
 from models.career_result import CareerResult
 
 from services.resume_loader import resume_to_text
+from services.ats_scorer import calculate_ats_score
 from services.github_loader import load_user_repositories
 from services.codeforces_service import (
     analyze_codeforces_skills
@@ -85,6 +86,10 @@ async def onboarding(
             resume_text = await resume_to_text(
                 resume
             )
+
+        ats_score = calculate_ats_score(
+            resume_text
+        )
 
         # ---------------------------------
         # GitHub
@@ -238,6 +243,8 @@ async def onboarding(
                 )
             )
 
+            skill_profile.ats_score = ats_score
+
             skill_profile.competitive_programming = (
                 cp_analysis
             )
@@ -267,6 +274,8 @@ async def onboarding(
                         "skills",
                         []
                     ),
+
+                ats_score=ats_score,
 
                 competitive_programming=
                     cp_analysis
@@ -329,7 +338,8 @@ async def onboarding(
 
         return {
             "message":
-                "Onboarding completed successfully."
+                "Onboarding completed successfully.",
+            "ats_score": ats_score,
         }
 
     except HTTPException:

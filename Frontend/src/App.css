@@ -592,7 +592,7 @@
 }
 .overview-row {
   display: grid;
-  grid-template-columns: 1fr 0.42fr;
+  grid-template-columns: 1fr 0.42fr 0.42fr;
   gap: 16px;
 }
 .progress-card {
@@ -4189,4 +4189,42 @@
     overflow-x: auto;
   }
 
+}
+.ats-card {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 244px;
+}
+.ats-card-icon {
+  color: var(--cyan);
+  background: #5ed6d114;
+}
+.ats-score-number {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  margin-top: 22px;
+  color: var(--cyan);
+  font-size: 3rem;
+  line-height: 1;
+  letter-spacing: -0.07em;
+}
+.ats-score-number small {
+  color: var(--muted);
+  font-size: 0.95rem;
+  letter-spacing: 0;
+}
+.ats-track {
+  height: 5px;
+  margin-top: 18px;
+  overflow: hidden;
+  border-radius: 9px;
+  background: #303633;
+}
+.ats-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--cyan);
 }
